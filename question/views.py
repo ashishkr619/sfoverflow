@@ -15,8 +15,8 @@ from question.models import Question,Tag,Owner
 
 
 
-# @ratelimit(key='get:q', rate='1000/d',block=True)
-# @ratelimit(key='get:q', rate='5/m',block=True)
+@ratelimit(key='get:q', rate='1000/d',block=True)
+@ratelimit(key='get:q', rate='5/m',block=True)
 def question(request):
     query = None
     results = []
