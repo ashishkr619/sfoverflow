@@ -15,13 +15,14 @@ from question.models import Question,Tag,Owner
 
 
 
-@ratelimit(key='get:q', rate='1000/d',block=True)
-@ratelimit(key='get:q', rate='5/m',block=True)
+# @ratelimit(key='get:q', rate='1000/d',block=True)
+# @ratelimit(key='get:q', rate='5/m',block=True)
 def question(request):
     query = None
     results = []
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
+    page = request.GET.get('page')
 
     if 'query' in request.GET:
         form = QuestionForm(request.GET)
@@ -52,8 +53,8 @@ def question(request):
                     question = Question.objects.create(is_answered=is_answered,view_count=view_count,closed_date=closed_date,link=link,answer_count=answer_count,score=score,last_activity_date=last_activity_date,creation_date=creation_date,question_id=question_id,closed_reason=closed_reason,title=title,display_name=display_name,search_term=search_term)
                     results.append(answers['items'][i]) 
          
-            paginator = Paginator(results,2)
-            page = request.GET.get('page')
+            paginator = Paginator(results,5)
+            # page = request.GET.get('page')
             try:
                 results = paginator.page(page)
             except PageNotAnInteger:
@@ -66,7 +67,7 @@ def question(request):
             return render(request, 'questionapp/questions.html', {'form': form, 'results': results,'query':query,'page':page,'num_visits':num_visits})
     else:
         form=QuestionForm()
-        return render(request, 'questionapp/questions.html', {'form': form,'num_visits':num_visits})            
+        return render(request, 'questionapp/questions.html', {'form': form,'num_visits':num_visits,'results': results,})            
 
 # def active(request):
 #     form = QuestionForm()

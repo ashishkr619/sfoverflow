@@ -47,12 +47,32 @@
                 <div class="card-body">
                   <h5 class="card-title">{{result.title}}</h5>
                   <p class="card-text">{{result.}}</p>
+                  {% if result.display_name %}
+                  <a href="#" class="btn btn-primary">{{result.display_name}}</a>
+                  {%else%}
                   <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
+                  {%endif%}
+
                 </div>
               </div>
              
               {%endfor%}
-              {% include "questionapp/pagination.html" with page=results %}
+
+              {%if results %}
+              <div class="pagination">
+                <span class="step-links">
+                    {% if results.has_previous %}
+                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
+                    </span>
+                    {% if results.has_next %}
+                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+            {%endif%}
         </div>
         <div class="tab-pane fade" id="activex" role="tabpanel" aria-labelledby="activex-tab">
             {% for result in results %}
@@ -67,6 +87,19 @@
               </div>
               {%endif%}
               {%endfor%}
+              <div class="pagination">
+                <span class="step-links">
+                    {% if results.has_previous %}
+                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
+                    </span>
+                    {% if results.has_next %}
+                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
         <div class="tab-pane fade" id="unanswered" role="tabpanel" aria-labelledby="unanswered-tab">unanswered
             {% for result in results %}
@@ -81,6 +114,19 @@
               </div>
               {%endif%}
               {%endfor%}
+              <div class="pagination">
+                <span class="step-links">
+                    {% if results.has_previous %}
+                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
+                    </span>
+                    {% if results.has_next %}
+                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
         <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
             {% for result in results %}
@@ -95,6 +141,20 @@
               </div>
               {%endif%}
               {%endfor%}
+              <div class="pagination">
+                <span class="step-links">
+                    {% if results.has_previous %}
+                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
+                    </span>
+                    {% if results.has_next %}
+                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+              
         </div>
       </div>
 </div>
