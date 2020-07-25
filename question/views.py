@@ -111,7 +111,7 @@ def question(request):
             return render(request, 'questionapp/questions.html', {'form': form, 'results': results,'query':query,'page':page,'num_visits':num_visits})
 
     
-    elif 'user' in request.GET :
+    elif'query' in None and  'user' in request.GET :
         form = QuestionForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['user']
