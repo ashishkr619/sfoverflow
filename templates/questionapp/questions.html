@@ -2,161 +2,168 @@
 {% load staticfiles %}
 {% block style %}
 <style type="text/css">
-    .properties_table {
-        min-height: 540px;
-        font-size: 14px;
-    }
+  .properties_table {
+    min-height: 540px;
+    font-size: 14px;
+  }
 </style>
 {% endblock %}
 {% block content %}
-<div class="container"> <h1>Search for question</h1>
-    <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
-    <form action="." method="GET">
-        {{ form.as_p }}
-        <input type="submit" value="Search">
-    </form>
+<div class="container">
+  <h1>Search for question</h1>
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+  <form action="." method="GET">
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+  </form>
 </div>
 {% if query %}
 <h1>Questions containing "{{ query }}"</h1>
 {%endif%}
 <hr>
 <div class="container">
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <a class="nav-item nav-link active" id="newest-tab" data-toggle="tab" href="#newest" role="tab" aria-controls="newest" aria-selected="true">Newest</a>
-          <a class="nav-item nav-link" id="activex-tab" data-toggle="tab" href="#activex" role="tab" aria-controls="activex" aria-selected="false">Active</a>
-          <a class="nav-item nav-link" id="unanswered-tab" data-toggle="tab" href="#unanswered" role="tab" aria-controls="unanswered" aria-selected="false">Unanswered</a>
-          <a class="nav-item nav-link" id="closed-tab" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed</a>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filters</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item"id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false" href="#activity">Activity</a>
-              <a class="dropdown-item" href="#creation">Creation Date</a>
-              <a class="dropdown-item" href="#votes">votes</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#relevance">Relevance</a>
-            </div>
-          </li>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="newest-tab" data-toggle="tab" href="#newest" role="tab"
+        aria-controls="newest" aria-selected="true">Newest</a>
+      <a class="nav-item nav-link" id="activex-tab" data-toggle="tab" href="#activex" role="tab" aria-controls="activex"
+        aria-selected="false">Active</a>
+      <a class="nav-item nav-link" id="unanswered-tab" data-toggle="tab" href="#unanswered" role="tab"
+        aria-controls="unanswered" aria-selected="false">Unanswered</a>
+      <a class="nav-item nav-link" id="closed-tab" data-toggle="tab" href="#closed" role="tab" aria-controls="closed"
+        aria-selected="false">Closed</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+          aria-expanded="false">Filters</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" id="activity-tab" data-toggle="tab" href="#activity" role="tab"
+            aria-controls="activity" aria-selected="false" href="#activity">Activity</a>
+          <a class="dropdown-item" href="#creation">Creation Date</a>
+          <a class="dropdown-item" href="#votes">votes</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#relevance">Relevance</a>
         </div>
-      </nav>
-      <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="newest" role="tabpanel" aria-labelledby="newest-tab">
-            {% for result in results %}
-            <div class="card">
-                <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
-                <div class="card-body">
-                  <h5 class="card-title">{{result.title}}</h5>
-                  <p class="card-text">{{result.}}</p>
-                  {% if result.display_name %}
-                  <a href="#" class="btn btn-primary">{{result.display_name}}</a>
-                  {%else%}
-                  <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
-                  {%endif%}
+      </li>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="newest" role="tabpanel" aria-labelledby="newest-tab">
+      {% for result in results %}
+      <div class="card">
+        <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{result.title}}</h5>
+          <p class="card-text">{{result.}}</p>
+          {% if result.display_name %}
+          <a href="#" class="btn btn-primary">{{result.display_name}}</a>
+          {%else%}
+          <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
+          {%endif%}
 
-                </div>
-              </div>
-             
-              {%endfor%}
-
-              {%if results %}
-              <div class="pagination">
-                <span class="step-links">
-                    {% if results.has_previous %}
-                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
-                    </span>
-                    {% if results.has_next %}
-                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
-                    {% endif %}
-                </span>
-            </div>
-            {%endif%}
-        </div>
-        <div class="tab-pane fade" id="activex" role="tabpanel" aria-labelledby="activex-tab">
-            {% for result in results %}
-            {% if not result.closed_date %}
-            <div class="card">
-                <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
-                <div class="card-body">
-                  <h5 class="card-title">{{result.title}}</h5>
-                  <p class="card-text">{{result.}}</p>
-                  <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
-                </div>
-              </div>
-              {%endif%}
-              {%endfor%}
-              <div class="pagination">
-                <span class="step-links">
-                    {% if results.has_previous %}
-                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
-                    </span>
-                    {% if results.has_next %}
-                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="unanswered" role="tabpanel" aria-labelledby="unanswered-tab">unanswered
-            {% for result in results %}
-            {% if not result.is_answered %}
-            <div class="card">
-                <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
-                <div class="card-body">
-                  <h5 class="card-title">{{result.title}}</h5>
-                  <p class="card-text">{{result.}}</p>
-                  <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
-                </div>
-              </div>
-              {%endif%}
-              {%endfor%}
-              <div class="pagination">
-                <span class="step-links">
-                    {% if results.has_previous %}
-                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
-                    </span>
-                    {% if results.has_next %}
-                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
-            {% for result in results %}
-            {% if  result.is_answered  %}
-            <div class="card">
-                <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
-                <div class="card-body">
-                  <h5 class="card-title">{{result.title}}</h5>
-                  <p class="card-text">{{result.}}</p>
-                  <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
-                </div>
-              </div>
-              {%endif%}
-              {%endfor%}
-              <div class="pagination">
-                <span class="step-links">
-                    {% if results.has_previous %}
-                    <a href="?query={{query}}&page={{ results.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    <span class="current">
-                        Page {{ results.number }} of {{ results.paginator.num_pages }}.
-                    </span>
-                    {% if results.has_next %}
-                    <a href="?query={{query}}&page={{ results.next_page_number }}">Next</a>
-                    {% endif %}
-                </span>
-            </div>
-              
         </div>
       </div>
+
+      {%endfor%}
+
+      {%if results %}
+      <div class="pagination">
+        <span class="step-links">
+          {% if results.has_previous %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current">
+            Page {{ results.number }} of {{ results.paginator.num_pages }}.
+          </span>
+          {% if results.has_next %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.next_page_number }}">Next</a>
+          {% endif %}
+        </span>
+      </div>
+      {%endif%}
+    </div>
+    <div class="tab-pane fade" id="activex" role="tabpanel" aria-labelledby="activex-tab">
+      {% for result in results %}
+      {% if not result.closed_date %}
+      <div class="card">
+        <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{result.title}}</h5>
+          <p class="card-text">{{result.}}</p>
+          <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
+        </div>
+      </div>
+      {%endif%}
+      {%endfor%}
+      <div class="pagination">
+        <span class="step-links">
+          {% if results.has_previous %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current">
+            Page {{ results.number }} of {{ results.paginator.num_pages }}.
+          </span>
+          {% if results.has_next %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.next_page_number }}">Next</a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="unanswered" role="tabpanel" aria-labelledby="unanswered-tab">unanswered
+      {% for result in results %}
+      {% if not result.is_answered %}
+      <div class="card">
+        <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{result.title}}</h5>
+          <p class="card-text">{{result.}}</p>
+          <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
+        </div>
+      </div>
+      {%endif%}
+      {%endfor%}
+      <div class="pagination">
+        <span class="step-links">
+          {% if results.has_previous %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current">
+            Page {{ results.number }} of {{ results.paginator.num_pages }}.
+          </span>
+          {% if results.has_next %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.next_page_number }}">Next</a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+      {% for result in results %}
+      {% if  result.is_answered  %}
+      <div class="card">
+        <h5 class="card-header">{{result.score}} votes| {{result.answer_count}} answers</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{result.title}}</h5>
+          <p class="card-text">{{result.}}</p>
+          <a href="#" class="btn btn-primary">{{result.owner.display_name}}</a>
+        </div>
+      </div>
+      {%endif%}
+      {%endfor%}
+      <div class="pagination">
+        <span class="step-links">
+          {% if results.has_previous %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current">
+            Page {{ results.number }} of {{ results.paginator.num_pages }}.
+          </span>
+          {% if results.has_next %}
+          <a href="?query={{query}}&user={{user}}&tag={{tag}}&page={{ results.next_page_number }}">Next</a>
+          {% endif %}
+        </span>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 {% endblock %}

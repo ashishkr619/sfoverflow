@@ -34,8 +34,9 @@ class Question(models.Model):
     link= models.URLField()
     closed_reason= models.CharField(max_length=255,blank=True,null=True)
     title= models.CharField(max_length=255)
-    display_name= models.CharField(max_length=255)
+    display_name= models.PositiveIntegerField(blank=True,null=True)
     search_term= models.CharField(max_length=255,blank=True,null=True)
+    tags = models.ManyToManyField(Tag,blank=True)
 
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
